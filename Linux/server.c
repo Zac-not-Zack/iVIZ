@@ -6,12 +6,39 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <sys/statvfs.h>
 
 #define PORT 30000
 #define IP_SERVER "134.59.139.192"
 
+struct typeInfo {
+char name[256];
+char OS[10];
+int sizeHD;
+int sizeHDDispo;
+int sizeRAM;
+char nameCPU[20];
+float speedCPU;
+float usageCPU;
+float temp;
+};
+
+struct statvfs stat;
+
+struct cpustat {
+    unsigned long t_user;
+    unsigned long t_nice;
+    unsigned long t_system;
+    unsigned long t_idle;
+    unsigned long t_iowait;
+    unsigned long t_irq;
+    unsigned long t_softirq;
+};
+
 int main(){
 
+	struct typeInfo info;
+	
 	int sockfd, ret;
 	struct sockaddr_in serverAddr;
 
@@ -60,11 +87,11 @@ int main(){
 			close(sockfd);
 
 			while(1){
-				recv(newSocket, buffer, 1024, 0);
-				
-					printf("Client: %s\n", buffer);
+				recv(newSocket, &info, sizeof(info), 0);
+					printf("From %s:%d\n", inet_ntoa(newAddr.sin_addr), ntohs(newAddr.sin_port));
+					printf("Client: %f\n", info.usageCPU);
 					//send(newSocket, buffer, strlen(buffer), 0);
-					bzero(buffer, sizeof(buffer));
+					bzero(&info, sizeof(info));
 				
 			}
 		}
