@@ -122,7 +122,7 @@ int main(){
 				line_size=getline(&buffer2,&buff_size,fp);
 				//printf("%s",buffer2);
 			}
-				printf("%d",line);
+				//printf("%d",line);
 				fPtr  = fopen("page.html", "r");
 			fTemp = fopen("replace.tmp", "w"); 
 
