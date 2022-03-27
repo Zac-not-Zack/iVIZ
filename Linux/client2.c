@@ -10,7 +10,6 @@
 
 #define PORT 30000
 #define IP_SERVER "10.0.2.15"
-#define DRIVER "sda1"
 
 struct typeInfo {
 char name[256];
@@ -43,7 +42,7 @@ int main(){
 	int clientSocket, ret;
 	struct sockaddr_in serverAddr;
 	char buffer[1024];
-	char str1[256], str2[256];
+	char str1[256], str2[256],nom[256];
 	float tmp;
 	int i;
 	struct typeInfo info;
@@ -76,7 +75,8 @@ int main(){
 		//Name of machine
 		fp = fopen ("/etc/hostname", "r");
 		fscanf(fp, "%s", str1);
-		strcpy(info.name,str1);
+		strcpy(nom,"Windows");
+		strcpy(info.name,nom);
 		printf("info.name %s\n",info.name);
 		
 		//OS of machine
@@ -88,7 +88,7 @@ int main(){
 		//Size HDD
 		fp = fopen ("/proc/partitions", "r");
 		while (fscanf(fp, "%*s %*s %s %s", str1,str2) != EOF ){
-			if(strcmp(str2,DRIVER)==0){
+			if(strcmp(str2,"sda1")==0){
 				tmp=atof(str1)/(1024*1024);
 				info.sizeHD=tmp;
 				printf("info.sizeHD %.fGB\n",info.sizeHD);
@@ -151,12 +151,12 @@ int main(){
 		int idle, total;
 		double usage;
 		char cpun[255];
-		while (fscanf(fp, "%s %d %d %d %d %d %d %d %*d %*d %*d ", cpun, &(cpustat1.t_user), &(cpustat1.t_nice), 
+		while (fscanf(fp, "%s %d %d %d %d %d %d %d", cpun, &(cpustat1.t_user), &(cpustat1.t_nice), 
 			&(cpustat1.t_system), &(cpustat1.t_idle), &(cpustat1.t_iowait), &(cpustat1.t_irq),
 			&(cpustat1.t_softirq))!= EOF ){
 		if(strcmp(cpun,"cpu")==0){
 				idle=cpustat1.t_idle+cpustat1.t_iowait;
-				total=cpustat1.t_user + cpustat1.t_nice + cpustat1.t_system + cpustat1.t_idle + cpustat1.t_iowait + cpustat1.t_irq + cpustat1.t_softirq;
+				total=cpustat1.t_user+cpustat1.t_nice+cpustat1.t_system+cpustat1.t_idle+cpustat1.t_iowait+cpustat1.t_irq+cpustat1.t_softirq;
 				usage= (double) (total-idle)/total*100;
 				info.usageCPU=usage;
 				printf("info.usageCPU %f%\n", info.usageCPU);
@@ -190,10 +190,9 @@ int main(){
 		
 		
 		
-		printf("%s %s %.2f %.2f %.2f %.2f %s %.2f %.2f %.2f \n", info.name, info.OS, 
+		printf("%s %s %.2f %.2f %.2f %.2f %s %.2f %.2f %.2f\n", info.name, info.OS, 
 				info.sizeHD, info.sizeHDDispo, info.sizeRAM, info.sizeRAMDispo, 
 				info.nameCPU, info.speedCPU, info.usageCPU, info.temp);
-		printf("\n");
 		send(clientSocket, &info, sizeof(info), 0);
 	
 		sleep(10);
