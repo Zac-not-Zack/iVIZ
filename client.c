@@ -192,6 +192,7 @@ int main(){
 		printf("%s %s %.2f %.2f %.2f %.2f %s %.2f %.2f %.2f\n", info.name, info.OS, 
 				info.sizeHD, info.sizeHDDispo, info.sizeRAM, info.sizeRAMDispo, 
 				info.nameCPU, info.speedCPU, info.usageCPU, info.temp);
+		printf("\n");
 		send(clientSocket, &info, sizeof(info), 0);
 	
 		sleep(10);
