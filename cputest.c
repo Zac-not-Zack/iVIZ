@@ -14,12 +14,4 @@ int main ()
           }
 }
 
-while (fscanf(fp, "%s %s", str1, str2) != EOF ){
-				strcpy(nomClient,"Linux");
-				strcat(str1, " ");
-				strcat(str1, str2);
-				
-				if(strstr(str1, nomClient)!=NULL){
-					printf("%s \n",str1);
-					
-				}
+
