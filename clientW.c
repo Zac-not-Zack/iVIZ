@@ -38,6 +38,7 @@ int main()
     SOCKET ConnectSocket = INVALID_SOCKET;
     struct addrinfo *result = NULL,
                     *ptr = NULL,
+		     hint
     char recvbuf[DEFAULT_BUFLEN];
     int iResult,iSendResult;
     int recvbuflen = DEFAULT_BUFLEN;
