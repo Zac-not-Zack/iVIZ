@@ -182,11 +182,11 @@ int main(){
 		printf("info.speedCPU %.2fGHz\n", info.speedCPU);
 		
 		//CPU Temperature
-		//fp = fopen ("/sys/class/thermal/thermal_zone0/temp", "r");
-		//fscanf(fp, "%s", str2);
-		//tmp=atof(str2)/(1000);
-		//info.temp=tmp;
-		//printf("%f\n",info.temp);
+		fp = fopen ("/sys/class/thermal/thermal_zone0/temp", "r");
+		fscanf(fp, "%s", str2);
+		tmp=atof(str2)/(1000);
+		info.temp=tmp;
+		printf("%f\n",info.temp);
 		
 		
 		
