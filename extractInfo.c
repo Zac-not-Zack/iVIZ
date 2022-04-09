@@ -7,6 +7,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <sys/statvfs.h>
+
 #define PATH "/"
 
 struct typeInfo {
@@ -36,6 +37,7 @@ int main(){
 
 	char str1[256], str2[256];
 	float tmp;
+	int tmp1;
 	struct typeInfo info;
 	struct cpustat cpustat1;
 		
@@ -75,7 +77,7 @@ int main(){
 	
 	
 	//Free HDD
-	  if (statvfs(PATH, &stat) == 0) {
+	  if (statvfs("/", &stat) == 0) {
 		// error happens, just quits here
 		tmp = (stat.f_frsize * stat.f_bavail)/(1024*1024);
 		info.sizeHDDispo=tmp;
@@ -87,9 +89,9 @@ int main(){
 	  fp = fopen ("/proc/partitions", "r");
 	while (fscanf(fp, "%*s %*s %s %s", str1,str2) != EOF ){
         if(strcmp(str2,"sda1")==0){
-			tmp=atof(str1)/(1024*1024);
-			info.sizeHD=tmp;
-			printf("%.fGB\n",tmp);
+			tmp1=atof(str1)/(1024*1024);
+			info.sizeHD=tmp1;
+			printf("%dGB\n",info.sizeHD);
 		}
 	}
 	//CPU usage
@@ -113,20 +115,34 @@ int main(){
 	char *buffer, *tmp2;
 	size_t buff_size = 0;
 	int i;
-	for (i=0;i<7;i++){
+	for (i=0;i<5;i++){
 		getline(&buffer,&buff_size,fp);
 	}
 	tmp2=strtok(buffer," ");
 	tmp2=strtok(NULL," ");
 	tmp2=strtok(NULL," ");
-	tmp=atof(tmp2)/(1000);
+	tmp2=strtok(NULL," ");
+	tmp2=strtok(NULL," ");
+	tmp2=strtok(NULL," ");
+	tmp2=strtok(NULL," ");
+	tmp2=strtok(NULL," ");
+	tmp=atof(tmp2);
 	info.speedCPU=tmp;
-	printf("%.2fGHz\n",tmp);
+	printf("%fGHz\n",tmp);
+	
+	fp=popen("top","r");
+	char path[1035];
+	while (fgets(path, sizeof(path), fp) != NULL) {
+    printf("%s", path);
+  }
+
+
+
 	
 	//CPU Temperature
-	fp = fopen ("/sys/class/thermal/thermal_zone0/temp", "r");
-	fscanf(fp, "%f", tmp);
-	info.temp=tmp;
-	printf("%s\n",info.temp);
+	//fp = fopen ("/sys/class/thermal/thermal_zone0/temp", "r");
+	//fscanf(fp, "%f", tmp);
+	//info.temp=tmp;
+	//printf("%s\n",info.temp);
 	
 }
