@@ -1,5 +1,4 @@
 # :desktop_computer: Projet “AppliRT - An application web to supervise an IT infrastructure”
-Name of module : apache_analyser.py
 
 Contributors : WONG Hoe Ziet & BINTI MOHAMAD Nurdini
 
