@@ -16,13 +16,13 @@ struct typeInfo {
 char name[256];
 char OS[10];
 float sizeHD;
-char sizeHDDispo[10];
+float sizeHDDispo;
 float sizeRAM;
-char sizeRAMDispo[10];
+float sizeRAMDispo;
 char nameCPU[200];
 float speedCPU;
-char usageCPU[10];
-char temp[10];
+float usageCPU;
+float temp;
 float uptime;
 };
 
@@ -75,7 +75,7 @@ int main(){
 	}
 	printf("[+]Connected to Server.\n");
 
-	while(1){//collection and encryption (certain information) of information
+	while(1){
 		
 			
 		FILE* fp;
@@ -83,7 +83,7 @@ int main(){
 		//Name of machine
 		fp = fopen ("/etc/hostname", "r");
 		fscanf(fp, "%s", str1);
-		strcpy(info.name,str1);
+		strcpy(info.name,"Windows");
 		printf("info.name %s\n",info.name);
 		
 		//OS of machine
@@ -107,9 +107,8 @@ int main(){
 		if (statvfs("/", &stat) == 0) {
 			// error happens, just quits here
 			tmp = (stat.f_frsize * stat.f_bavail)/(1024*1024);
-			gcvt(tmp,8,info.sizeHDDispo);//change float to string
-			encrypt(info.sizeHDDispo);
-			printf("info.sizeHDDispo %sMB\n", info.sizeHDDispo);
+			info.sizeHDDispo=tmp;
+			printf("info.sizeHDDispo %.fMB\n", info.sizeHDDispo);
 	  
 		}
 		char *buffer, *tmp2;
@@ -129,10 +128,8 @@ int main(){
 		fp = fopen ("/proc/meminfo", "r");
 		while (fscanf(fp, "%s %s %*s ", str1,str2) != EOF ){
 			if(strcmp(str1,"MemFree:")==0){
-				tmp=atof(str2)/1000;;
-				gcvt(tmp,4,info.sizeRAMDispo);
-				encrypt(info.sizeRAMDispo);
-				printf("info.sizeRAMDispo %sMB\n",info.sizeRAMDispo);
+				info.sizeRAMDispo=atof(str2)/1000;
+				printf("info.sizeRAMDispo %.2fMB\n",info.sizeRAMDispo);
 			}
 		}
 		
@@ -169,9 +166,8 @@ int main(){
 				idle=cpustat1.t_idle+cpustat1.t_iowait;
 				total=cpustat1.t_user + cpustat1.t_nice + cpustat1.t_system + cpustat1.t_idle + cpustat1.t_iowait + cpustat1.t_irq + cpustat1.t_softirq;
 				usage= (double) (total-idle)/total*100;
-				gcvt(usage,6,info.usageCPU);
-				encrypt(info.usageCPU);
-				printf("info.usageCPU %s%\n", info.usageCPU);
+				info.usageCPU=usage;
+				printf("info.usageCPU %f%\n", info.usageCPU);
 			}
 		}
 		//CPU Speed
@@ -197,18 +193,16 @@ int main(){
 		//fp = fopen ("/sys/class/thermal/thermal_zone0/temp", "r");
 		//fscanf(fp, "%s", str2);
 		//tmp=atof(str2)/(1000);
-		//gcvt(tmp,4,info.temp);
-		//encrypt(info.temp);
-		//printf("%s\n",info.temp);
+		//info.temp=tmp;
+		//printf("%f\n",info.temp);
 		
 		//UpTime
 		fp = fopen ("/proc/uptime", "r");
 		fscanf(fp, "%s %*s", str1);
 		tmp=atof(str1)/(60);
-		//encrypt(tmp);
 		info.uptime=tmp;
 		
-		printf("%s %s %.2f %s %.2f %s %s %.2f %s %s %.2f \n", info.name, info.OS, 
+		printf("%s %s %.2f %.2f %.2f %.2f %s %.2f %.2f %.2f %.2f \n", info.name, info.OS, 
 				info.sizeHD, info.sizeHDDispo, info.sizeRAM, info.sizeRAMDispo, 
 				info.nameCPU, info.speedCPU, info.usageCPU, info.temp, info.uptime);
 		printf("\n");
