@@ -3,7 +3,7 @@
 Contributors : WONG Hoe Ziet & BINTI MOHAMAD Nurdini
 
 # :open_book: Overview
-This is a project of the module "Application Réseaux & Télécommunications" for the course of Diplôme Universitaire Technologie (DUT) Réseaux & Télécommunications.
+This is a project of the module "Application Informatique dédiée aux Réseaux & Télécommunications" for the course of Diplôme Universitaire Technologie (DUT) Réseaux & Télécommunications.
 
 The main function of the project is to create a web application that allows our client to monitor and supervise the state of all the computers and servers in an infrastructure.
 
